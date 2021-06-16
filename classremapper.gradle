@@ -1,0 +1,59 @@
+import net.minecraftforge.gradle.common.task.TaskApplyRangeMap
+import net.minecraftforge.gradle.common.task.TaskExtractExistingFiles
+import net.minecraftforge.gradle.common.task.TaskExtractRangeMap
+import net.minecraftforge.gradle.common.util.MavenArtifactDownloader
+import net.minecraftforge.gradle.common.util.MinecraftExtension
+import net.minecraftforge.gradle.common.util.MinecraftRepo
+import net.minecraftforge.srgutils.IMappingBuilder
+import net.minecraftforge.srgutils.IMappingFile
+
+repositories {
+    maven { url = 'https://maven.minecraftforge.net' }
+    mavenCentral()
+}
+
+def doingUpdate = hasProperty('UPDATE_CLASSNAMES')
+
+if (doingUpdate) {
+    def javaCompile = tasks.getByName('compileJava') as JavaCompile
+    def sourceSets = (convention.plugins.get('java') as JavaPluginConvention).sourceSets
+    Set<File> srcDirs = new HashSet<>()
+    (findProperty('UPDATE_SOURCESETS') ?: 'main').toString().split(';').each {
+        srcDirs.addAll(sourceSets.getByName(it).java.srcDirs)
+    }
+
+    if (srcDirs.empty)
+        throw new RuntimeException("No java source directories found to update!")
+
+    afterEvaluate {
+        def mcExtension = extensions.findByType(MinecraftExtension.class)
+
+        task extractRangeMap(type: TaskExtractRangeMap) {
+            sources srcDirs
+            addDependencies javaCompile.getClasspath()
+        }
+
+        task chainMappings(type: CreatedChainMojmapsTask) {
+            dependsOn(extractSrg)
+            mcVersion MinecraftRepo.getMCVersion(mcExtension.mappingVersion)
+            extractSrgInput tasks.extractSrg.output
+        }
+
+        task applyRangeMap(type: TaskApplyRangeMap) {
+            dependsOn(extractRangeMap, chainMappings)
+            rangeMap tasks.extractRangeMap.output
+            setSrgFiles chainMappings.output //, tasks.createMcpToSrg.output
+            sources srcDirs
+        }
+
+        task extractMappedNew(type: TaskExtractExistingFiles) { task ->
+            dependsOn(applyRangeMap)
+            archive tasks.applyRangeMap.output
+            srcDirs.each { task.addTarget(it) }
+        }
+
+        task updateClassnames {
+            dependsOn(extractMappedNew)
+        }
+    }
+}
