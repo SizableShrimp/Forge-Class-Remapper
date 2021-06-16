@@ -31,8 +31,9 @@ This script can be used by adding the following line to your `build.gradle`:
 ```groovy
 apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 ```
-This should be near the top of the file below other plugins. Here is an example:
+This should be near the top of the file below ALL other plugins. Here is an example:
 ```groovy
+apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
