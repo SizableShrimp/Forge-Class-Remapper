@@ -35,8 +35,6 @@ if (doingUpdate) {
         if (srcDirs.empty)
             throw new RuntimeException("No java source directories found to update!")
 
-        def mcExtension = project.extensions.findByType(MinecraftExtension.class)
-
         task extractRangeMap(type: TaskExtractRangeMap) {
             sources srcDirs
             addDependencies javaCompile.getClasspath()
@@ -44,7 +42,7 @@ if (doingUpdate) {
 
         task chainMappings(type: CreatedChainMojmapsTask) {
             dependsOn(extractSrg)
-            mcVersion MinecraftRepo.getMCVersion(mcExtension.mappingVersion)
+            mcVersion MinecraftRepo.getMCVersion(project.extensions.findByType(MinecraftExtension.class).mappingVersion ?: '1.16.5')
             extractSrgInput tasks.extractSrg.output
         }
 
