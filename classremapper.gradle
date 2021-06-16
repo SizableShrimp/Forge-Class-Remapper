@@ -24,18 +24,18 @@ repositories {
 def doingUpdate = hasProperty('UPDATE_CLASSNAMES')
 
 if (doingUpdate) {
-    def javaCompile = tasks.getByName('compileJava') as JavaCompile
-    def sourceSets = (convention.plugins.get('java') as JavaPluginConvention).sourceSets
-    Set<File> srcDirs = new HashSet<>()
-    (findProperty('UPDATE_SOURCESETS') ?: 'main').toString().split(';').each {
-        srcDirs.addAll(sourceSets.getByName(it).java.srcDirs)
-    }
+    afterEvaluate { project ->
+        def javaCompile = project.tasks.getByName('compileJava') as JavaCompile
+        def sourceSets = (project.convention.plugins.get('java') as JavaPluginConvention).sourceSets
+        Set<File> srcDirs = new HashSet<>()
+        (project.findProperty('UPDATE_SOURCESETS') ?: 'main').toString().split(';').each {
+            srcDirs.addAll(sourceSets.getByName(it).java.srcDirs)
+        }
 
-    if (srcDirs.empty)
-        throw new RuntimeException("No java source directories found to update!")
+        if (srcDirs.empty)
+            throw new RuntimeException("No java source directories found to update!")
 
-    project.gradle.projectsEvaluated {
-        def mcExtension = extensions.findByType(MinecraftExtension.class)
+        def mcExtension = project.extensions.findByType(MinecraftExtension.class)
 
         task extractRangeMap(type: TaskExtractRangeMap) {
             sources srcDirs
