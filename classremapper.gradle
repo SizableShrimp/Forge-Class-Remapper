@@ -66,3 +66,22 @@ if (doingUpdate) {
         }
     }
 }
+
+class CreatedChainMojmapsTask extends DefaultTask {
+    @Input String mcVersion
+    @InputFile File extractSrgInput
+    @OutputFile File output = new File(project.buildDir, name + "/chainedmappings.tsrg")
+
+    @TaskAction
+    void doTask() {
+        def mojToObf = IMappingFile.load(MavenArtifactDownloader.generate(project, "net.minecraft:client:${mcVersion}:mappings@txt", false))
+        def obfToSrg = IMappingFile.load(extractSrgInput)
+
+        def mojToSrg = mojToObf.chain(obfToSrg)
+        def builder = IMappingBuilder.create()
+
+        mojToSrg.getClasses().each {builder.addClass(it.mapped, it.original) }
+
+        builder.build().write(output.toPath(), IMappingFile.Format.TSRG2)
+    }
+}
