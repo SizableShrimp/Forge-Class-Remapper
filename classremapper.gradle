@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.+', changing: true
+    }
+}
 import net.minecraftforge.gradle.common.task.TaskApplyRangeMap
 import net.minecraftforge.gradle.common.task.TaskExtractExistingFiles
 import net.minecraftforge.gradle.common.task.TaskExtractRangeMap
