@@ -34,7 +34,7 @@ if (doingUpdate) {
     if (srcDirs.empty)
         throw new RuntimeException("No java source directories found to update!")
 
-    afterEvaluate {
+    project.gradle.projectsEvaluated {
         def mcExtension = extensions.findByType(MinecraftExtension.class)
 
         task extractRangeMap(type: TaskExtractRangeMap) {
