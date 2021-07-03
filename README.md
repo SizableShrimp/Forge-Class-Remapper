@@ -51,10 +51,11 @@ This is a semicolon-separated list that can be defined, for example, as `-PUPDAT
 
 ### 5. Update your mappings version
 You should now update your mappings `version` to match the Minecraft version you are updating to.
-For example, if you are now developing for 1.17.0, your `mappings` line should look like this:
+For example, if you are now developing for 1.17.1, your `mappings` line should look like this:
 ```groovy
-    mappings channel: 'official', version: '1.17'
+    mappings channel: 'official', version: '1.17.1'
 ```
+You should now also update your Forge and ForgeGradle versions, if not already.
 
 ### 6. Done!
 Afterwards, your mod should now be on Mojang classnames!
