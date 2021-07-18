@@ -1,10 +1,11 @@
 # Forge-Class-Remapper
-**Forge-Class-Remapper** helps you remap your Forge mod to use Mojang classnames on 1.17+.
-This is intended is for helping you update your mod from 1.16 or lower to 1.17 or higher.
+**Forge-Class-Remapper** helps you remap your Forge mod to use Mojang classnames on 1.17+ or MCP classnames on 1.16 and lower.
+This is intended is for helping you update your mod from 1.16 or lower to 1.17 or higher, or in the opposite direction.
 Forge 1.17 moved to using Mojang classnames as Mojang mappings are now the default mappings used with Forge.
-Previously, Forge 1.16 and lower used MCP classnames.
+Forge 1.16 and lower uses MCP classnames.
 For more information, see [here](https://github.com/MinecraftForge/MCPConfig/blob/master/Mojang.md).
 This script only automates what would otherwise be very hard to do manually, **remap ALL the classnames for you.**
+This script also remaps your access transformer files.
 
 ## How to use this
 
@@ -43,11 +44,14 @@ apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remappe
 ### 4. Run this command
 After adding the above line, you are now ready to update your classnames by running a Gradle task. The gradle task can be run as follows:
 ```groovy
-gradlew -PUPDATE_CLASSNAMES=true updateClassnames
+gradlew -PUPDATE_CLASSNAMES=true
 ```
 By default, this will only apply to the `main` sourceset. 
 If you have an `api` sourceset or other sourcesets, you can add these as well using the `UPDATE_SOURCESETS` property.
 This is a semicolon-separated list that can be defined, for example, as `-PUPDATE_SOURCESETS=main;api` and would be inserted into the above command.
+
+If you are **backporting** a mod from 1.17 or later to 1.16 or earlier, add `-PREVERSED=true`. This will convert the classnames from Mojang back to MCP.
+You should do #5 FIRST for the Minecraft version you are switching to, otherwise the script will crash because MCP classnames do not exist for newer Minecraft versions.
 
 ### 5. Update your mappings version
 You should now update your mappings `version` to match the Minecraft version you are updating to.
