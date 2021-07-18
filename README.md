@@ -62,8 +62,8 @@ For example, if you are now developing for 1.17.1, your `mappings` line should l
 You should now also update your Forge and ForgeGradle versions, if not already.
 
 ### 6. Done!
-Afterwards, your mod should now be on Mojang classnames!
-You can now delete the `apply from:` line from your `build.gradle` and continue updating your mod.
+Afterwards, your mod should now have new classnames!
+You can now delete the `apply from:` line from your `build.gradle` and continue updating/backporting your mod.
 Happy modding!
 
 *If you have any issues, feel free to contact me on Discord @ `SizableShrimp#0755` or ask in [the Forge discord](https://discord.gg/UvedJ9m).*
