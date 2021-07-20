@@ -51,7 +51,6 @@ If you have an `api` sourceset or other sourcesets, you can add these as well us
 This is a semicolon-separated list that can be defined, for example, as `-PUPDATE_SOURCESETS=main;api` and would be inserted into the above command.
 
 If you are **backporting** a mod from 1.17 or later to 1.16 or earlier, add `-PREVERSED=true`. This will convert the classnames from Mojang back to MCP.
-You should do #5 FIRST for the Minecraft version you are switching to, otherwise the script will crash because MCP classnames do not exist for newer Minecraft versions.
 
 ### 5. Update your mappings version
 You should now update your mappings `version` to match the Minecraft version you are updating to.
