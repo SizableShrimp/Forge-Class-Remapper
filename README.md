@@ -15,6 +15,17 @@ You should make a backup in case anything goes wrong.
 If not already, using Git or another version control system is highly recommended, even if private.
 You have been warned.
 
+### 2. Update your ForgeGradle version (if not already)
+This script uses tasks and other things from ForgeGradle 5. You must be on ForgeGradle 5 for this to work correctly.
+Update this line in your `build.gradle` and change the old number to `5.1.+`.
+```groovy
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+```
+Go to `gradle/wrapper/gradle-wrapper.properties` and change the line starting with `distributionUrl` to be:
+```properties
+distributionUrl=https\://services.gradle.org/distributions/gradle-7.1.1-bin.zip
+```
+
 ### 2. Update your mappings to `official` (if not already)
 This script only remaps classnames and *not* methods or fields.
 For best results, you should be using `official` mappings in ForgeGradle before running this script using the **old** version of Minecraft.

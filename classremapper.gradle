@@ -27,6 +27,9 @@ import net.minecraftforge.srgutils.IRenamer
 
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.net.URL
 
 def doingUpdate = hasProperty('UPDATE_CLASSNAMES')
 def isReversed = hasProperty('REVERSED')
@@ -34,7 +37,7 @@ def isReversed = hasProperty('REVERSED')
 if (doingUpdate) {
     afterEvaluate { project ->
         def javaCompile = project.tasks.getByName('compileJava') as JavaCompile
-        def sourceSets = (project.extensions.getByType(JavaPluginExtension)).sourceSets
+        def sourceSets = project.sourceSets
         Set<File> srcDirs = new HashSet<>()
         (project.findProperty('UPDATE_SOURCESETS') ?: 'main').toString().split(';').each {
             srcDirs.addAll(sourceSets.getByName(it).java.srcDirs)
@@ -122,16 +125,22 @@ abstract class CreateChainedClassnames extends DefaultTask {
 
     @Internal
     InputStream getMojmaps() {
-        try (InputStream manIn = new URL(MANIFEST_URL).openStream()) {
-            URL url = GSON.fromJson(new InputStreamReader(manIn), ManifestJson.class).getUrl(mcVersion.get())
+        def manIn = new URL(MANIFEST_URL).openStream()
+        try {
+            def url = GSON.fromJson(new InputStreamReader(manIn), ManifestJson.class).getUrl(mcVersion.get())
 
-            try (InputStream verIn = url.openStream()) {
-                VersionJson json = GSON.fromJson(new InputStreamReader(verIn), VersionJson.class)
+            def verIn = url.openStream()
+            try {
+                def json = GSON.fromJson(new InputStreamReader(verIn), VersionJson.class)
 
-                VersionJson.Download download = json.downloads.get("client_mappings")
+                def download = json.downloads.get("client_mappings")
 
                 return download.url.openStream()
+            } finally {
+                verIn.close()
             }
+        } finally {
+            manIn.close()
         }
     }
 }
@@ -159,8 +168,9 @@ abstract class ChainOldToNewSrg extends DefaultTask {
     }
 
     static getJoinedSrg(url) {
-        try (def baos = new ByteArrayOutputStream()
-             def zis = new ZipInputStream(new URL(url).openStream())) {
+        def baos = new ByteArrayOutputStream()
+        def zis = new ZipInputStream(new URL(url).openStream())
+        try {
             ZipEntry entry
             while ((entry = zis.getNextEntry()) != null) {
                 if (entry.name != 'config/joined.tsrg') continue
@@ -171,6 +181,9 @@ abstract class ChainOldToNewSrg extends DefaultTask {
                 }
             }
             return IMappingFile.load(new ByteArrayInputStream(baos.toByteArray()))
+        } finally {
+            baos.close()
+            zis.close()
         }
     }
 }
