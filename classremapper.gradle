@@ -198,9 +198,6 @@ abstract class UpdateATs extends DefaultTask {
 
         for (def file : accessTransformers.getFiles()) {
             def text = file.text
-            text = text.replaceAll(/L([\w\/$]+);/) {
-                "L${mappings.remapClass(it[1])};"
-            }
             def lines = text.split('\n')
             def newLines = lines.collect { line ->
                 def original = line
@@ -217,7 +214,7 @@ abstract class UpdateATs extends DefaultTask {
                     def entry = split[2]
                     idx = entry.indexOf('(')
                     if (idx == -1) {
-                        split[2] = cls.remapField(entry) ?: entry
+                        split[2] = cls.remapField(entry)
                     } else {
                         def mtdName = entry.substring(0, idx)
                         def desc = entry.substring(idx)
