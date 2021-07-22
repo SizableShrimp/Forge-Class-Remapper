@@ -104,7 +104,7 @@ abstract class CreateChainedClassnames extends DefaultTask {
     @Input @Optional abstract Property<Boolean> getReversed()
 
     CreateChainedClassnames() {
-        output.convention(project.layout.buildDirectory.dir(name).map(d -> d.file('chainedmappings.tsrg')))
+        output.convention(project.layout.buildDirectory.dir(name).map { d -> d.file('chainedmappings.tsrg') })
     }
 
     @TaskAction
@@ -144,7 +144,7 @@ abstract class ChainOldToNewSrg extends DefaultTask {
     @Internal abstract Property<IRenamer> getRenamer()
 
     ChainOldToNewSrg() {
-        output.convention(project.layout.buildDirectory.dir(name).map(d -> d.file('chained.tsrg')))
+        output.convention(project.layout.buildDirectory.dir(name).map { d -> d.file('chained.tsrg') })
     }
 
     @TaskAction
