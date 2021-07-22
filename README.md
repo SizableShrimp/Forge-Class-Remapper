@@ -55,7 +55,7 @@ apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remappe
 ### 5. Run this command
 After adding the above line, you are now ready to update your classnames by running a Gradle task. The gradle task can be run as follows:
 ```groovy
-gradlew -PUPDATE_CLASSNAMES=true
+gradlew -PUPDATE_CLASSNAMES=true updateClassnames
 ```
 By default, this will only apply to the `main` sourceset. 
 If you have an `api` sourceset or other sourcesets, you can add these as well using the `UPDATE_SOURCESETS` property.
