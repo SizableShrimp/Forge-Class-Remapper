@@ -199,7 +199,7 @@ abstract class UpdateATs extends DefaultTask {
         for (def file : accessTransformers.getFiles()) {
             def text = file.text
             text = text.replaceAll(/L([\w\/$]+);/) {
-                mappings.remapClass(it)
+                mappings.remapClass(it[1])
             }
             def lines = text.split('\n')
             def newLines = lines.collect { line ->
