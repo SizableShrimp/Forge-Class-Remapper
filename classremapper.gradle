@@ -221,7 +221,8 @@ abstract class UpdateATs extends DefaultTask {
                     } else {
                         def mtdName = entry.substring(0, idx)
                         def desc = entry.substring(idx)
-                        split[2] = cls.remapMethod(mtdName, desc) ?: entry
+                        def newMethod = cls.getMethod(mtdName, desc)
+                        split[2] = newMethod ? newMethod.mapped + newMethod.mappedDescriptor : entry
                     }
                 }
                 return String.join(' ', split) + (comment ? ' ' + comment : '')
