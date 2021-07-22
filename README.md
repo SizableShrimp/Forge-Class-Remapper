@@ -26,7 +26,7 @@ Go to `gradle/wrapper/gradle-wrapper.properties` and change the line starting wi
 distributionUrl=https\://services.gradle.org/distributions/gradle-7.1.1-bin.zip
 ```
 
-### 2. Update your mappings to `official` (if not already)
+### 3. Update your mappings to `official` (if not already)
 This script only remaps classnames and *not* methods or fields.
 For best results, you should be using `official` mappings in ForgeGradle before running this script using the **old** version of Minecraft.
 For example, on 1.16.5, this can be achieved by running the following command:
@@ -38,7 +38,7 @@ Then, change the `mappings` line in your `build.gradle` to this line:
     mappings channel: 'official', version: '1.16.5'
 ```
 
-### 3. Add this line to your `build.gradle`
+### 4. Add this line to your `build.gradle`
 This script can be used by adding the following line to your `build.gradle`:
 ```groovy
 apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
@@ -52,7 +52,7 @@ apply plugin: 'maven-publish'
 apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 ```
 
-### 4. Run this command
+### 5. Run this command
 After adding the above line, you are now ready to update your classnames by running a Gradle task. The gradle task can be run as follows:
 ```groovy
 gradlew -PUPDATE_CLASSNAMES=true
@@ -63,7 +63,7 @@ This is a semicolon-separated list that can be defined, for example, as `-PUPDAT
 
 If you are **backporting** a mod from 1.17 or later to 1.16 or earlier, add `-PREVERSED=true`. This will convert the classnames from Mojang back to MCP.
 
-### 5. Update your mappings version
+### 6. Update your mappings version
 You should now update your mappings `version` to match the Minecraft version you are updating to.
 For example, if you are now developing for 1.17.1, your `mappings` line should look like this:
 ```groovy
@@ -71,7 +71,7 @@ For example, if you are now developing for 1.17.1, your `mappings` line should l
 ```
 You should now also update your Forge and ForgeGradle versions, if not already.
 
-### 6. Done!
+### 7. Done!
 Afterwards, your mod should now have new classnames!
 You can now delete the `apply from:` line from your `build.gradle` and continue updating/backporting your mod.
 Happy modding!
