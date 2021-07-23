@@ -52,7 +52,7 @@ if (doingUpdate) {
         }
 
         task chainClassnames(type: CreateChainedClassnames) {
-            def version = MinecraftRepo.getMCVersion(minecraft?.mappingVersion?.get() ?: '1.16.5')
+            def version = (project.getExtensions().getExtraProperties().get("MC_VERSION") as String) ?: '1.16.5'
             version = version.substring(version.lastIndexOf('-') + 1)
             mcVersion = version
             reversed = isReversed
@@ -197,6 +197,7 @@ abstract class UpdateATs extends DefaultTask {
         def mappings = IMappingFile.load(mappings.get().asFile)
 
         for (def file : accessTransformers.getFiles()) {
+            if (!file.exists()) continue
             def text = file.text
             def lines = text.split('\n')
             def newLines = lines.collect { line ->
