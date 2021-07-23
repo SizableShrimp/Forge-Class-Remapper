@@ -52,7 +52,8 @@ if (doingUpdate) {
         }
 
         task chainClassnames(type: CreateChainedClassnames) {
-            def version = (project.getExtensions().getExtraProperties().get("MC_VERSION") as String) ?: '1.16.5'
+            def version = project.getExtensions().getExtraProperties().get('MC_VERSION') as String
+            if (!version) throw new IllegalStateException('The minecraft version could not be found!')
             version = version.substring(version.lastIndexOf('-') + 1)
             mcVersion = version
             reversed = isReversed
