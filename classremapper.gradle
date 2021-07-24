@@ -200,7 +200,8 @@ abstract class UpdateATs extends DefaultTask {
         for (def file : accessTransformers.getFiles()) {
             if (!file.exists()) continue
             def text = file.text
-            def lines = text.split('\n')
+            def crlf = text.contains('\r')
+            def lines = text.split('\r?\n')
             def newLines = lines.collect { line ->
                 def original = line
                 if (!line) return original
@@ -226,7 +227,7 @@ abstract class UpdateATs extends DefaultTask {
                 }
                 return String.join(' ', split) + (comment ? ' ' + comment : '')
             }
-            file.text = String.join('\n', newLines)
+            file.text = String.join(crlf ? '\r\n' : '\n', newLines)
         }
     }
 }
