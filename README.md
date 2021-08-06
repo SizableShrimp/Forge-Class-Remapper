@@ -7,6 +7,9 @@ For more information, see [here](https://github.com/MinecraftForge/MCPConfig/blo
 This script only automates what would otherwise be very hard to do manually, **remap ALL the classnames for you.**
 This script also remaps your access transformer files.
 
+## Note: You MUST run this BEFORE updating/downgrading your Forge version
+This script has to be the first thing you run, otherwise it won't work.
+
 ## How to use this
 
 ### 1. Make a backup!
