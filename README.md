@@ -62,7 +62,7 @@ gradlew -PUPDATE_CLASSNAMES=true updateClassnames
 ```
 By default, this will only apply to the `main` sourceset. 
 If you have an `api` sourceset or other sourcesets, you can add these as well using the `UPDATE_SOURCESETS` property.
-This is a semicolon-separated list that can be defined, for example, as `-PUPDATE_SOURCESETS=main;api` and would be inserted into the above command.
+This is a semicolon-separated list that can be defined, for example, as `-PUPDATE_SOURCESETS="main;api"` and would be inserted into the above command.
 
 If you are **backporting** a mod from 1.17 or later to 1.16 or earlier, add `-PREVERSED=true`. This will convert the classnames from Mojang back to MCP.
 
