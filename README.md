@@ -26,7 +26,7 @@ Update this line in your `build.gradle` and change the old number to `5.1.+`.
 ```
 Go to `gradle/wrapper/gradle-wrapper.properties` and change the line starting with `distributionUrl` to be:
 ```properties
-distributionUrl=https\://services.gradle.org/distributions/gradle-7.1.1-bin.zip
+distributionUrl=https\://services.gradle.org/distributions/gradle-7.3.1-bin.zip
 ```
 
 ### 3. Update your mappings to `official` (if not already)
