@@ -31,8 +31,8 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.URL
 
-def doingUpdate = hasProperty('UPDATE_CLASSNAMES')
-def isReversed = hasProperty('REVERSED')
+def doingUpdate = Boolean.parseBoolean(findProperty('UPDATE_CLASSNAMES'))
+def isReversed = Boolean.parseBoolean(findProperty('REVERSED'))
 
 if (doingUpdate) {
     afterEvaluate { project ->
@@ -55,9 +55,9 @@ if (doingUpdate) {
             def version = project.getExtensions().getExtraProperties().get('MC_VERSION') as String
             if (!version) throw new IllegalStateException('The minecraft version could not be found!')
             version = version.substring(version.lastIndexOf('-') + 1)
-            mcVersion = version
+            // mcVersion = version
             reversed = isReversed
-            input = tasks.extractSrg.output
+            // input = tasks.extractSrg.output
         }
 
         task applyRangeMap(type: ApplyRangeMap) {
@@ -102,8 +102,8 @@ if (doingUpdate) {
 abstract class CreateChainedClassnames extends DefaultTask {
     private static final String MANIFEST_URL = "https://launchermeta.mojang.com/mc/game/version_manifest.json"
     private static final Gson GSON = new GsonBuilder().create()
-    @Input abstract Property<String> getMcVersion()
-    @InputFile abstract RegularFileProperty getInput()
+    // @Input abstract Property<String> getMcVersion()
+    // @InputFile abstract RegularFileProperty getInput()
     @OutputFile abstract RegularFileProperty getOutput()
     @Input @Optional abstract Property<Boolean> getReversed()
 
@@ -113,22 +113,22 @@ abstract class CreateChainedClassnames extends DefaultTask {
 
     @TaskAction
     void doTask() {
-        def mojToObf = IMappingFile.load(mojmaps)
-        def obfToSrg = IMappingFile.load(input.get().asFile)
+        // def mojToObf = IMappingFile.load(getMojmaps(mcVersion.get()))
+        def mojToObf = IMappingFile.load(getMojmaps('1.16.5'))
+        def obfToSrg = ChainOldToNewSrg.getJoinedSrg(ChainOldToNewSrg.OLD_SRG)
 
         def mojToSrg = mojToObf.chain(obfToSrg)
 
         def builder = IMappingBuilder.create()
-        mojToSrg.getClasses().each {builder.addClass(it.mapped, it.original) }
+        mojToSrg.getClasses().each { builder.addClass(it.mapped, it.original) }
         def built = builder.build().getMap('left', 'right')
         built.write(output.get().asFile.toPath(), IMappingFile.Format.TSRG2, reversed.getOrElse(false))
     }
 
-    @Internal
-    InputStream getMojmaps() {
+    static InputStream getMojmaps(String version) {
         def manIn = new URL(MANIFEST_URL).openStream()
         try {
-            def url = GSON.fromJson(new InputStreamReader(manIn), ManifestJson.class).getUrl(mcVersion.get())
+            def url = GSON.fromJson(new InputStreamReader(manIn), ManifestJson.class).getUrl(version)
 
             def verIn = url.openStream()
             try {
@@ -147,8 +147,8 @@ abstract class CreateChainedClassnames extends DefaultTask {
 }
 
 abstract class ChainOldToNewSrg extends DefaultTask {
-    private static final NEW_SRG = 'https://maven.minecraftforge.net/de/oceanlabs/mcp/mcp_config/1.16.5-20210303.130956/mcp_config-1.16.5-20210303.130956.zip'
-    private static final OLD_SRG = 'https://maven.minecraftforge.net/de/oceanlabs/mcp/mcp_config/1.16.5-20210115.111550/mcp_config-1.16.5-20210115.111550.zip'
+    public static final NEW_SRG = 'https://maven.minecraftforge.net/de/oceanlabs/mcp/mcp_config/1.16.5-20210303.130956/mcp_config-1.16.5-20210303.130956.zip'
+    public static final OLD_SRG = 'https://maven.minecraftforge.net/de/oceanlabs/mcp/mcp_config/1.16.5-20210115.111550/mcp_config-1.16.5-20210115.111550.zip'
     @OutputFile abstract RegularFileProperty getOutput()
     @Input @Optional abstract Property<Boolean> getReversed()
     @Internal abstract Property<IRenamer> getRenamer()

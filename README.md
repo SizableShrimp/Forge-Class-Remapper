@@ -26,12 +26,12 @@ Update this line in your `build.gradle` and change the old number to `5.1.+`.
 ```
 Go to `gradle/wrapper/gradle-wrapper.properties` and change the line starting with `distributionUrl` to be:
 ```properties
-distributionUrl=https\://services.gradle.org/distributions/gradle-7.3.1-bin.zip
+distributionUrl=https\://services.gradle.org/distributions/gradle-7.4-bin.zip
 ```
 
 ### 3. Update your mappings to `official` (if not already)
 This script only remaps classnames and *not* methods or fields.
-For best results, you should be using `official` mappings in ForgeGradle before running this script using the **old** version of Minecraft.
+For best results, you should be using `official` mappings in ForgeGradle before running this script using the Minecraft version **before** porting.
 For example, on 1.16.5, this can be achieved by running the following command:
 ```groovy
 gradlew -PUPDATE_MAPPINGS_CHANNEL="official" -PUPDATE_MAPPINGS="1.16.5" updateMappings
@@ -66,13 +66,13 @@ This is a semicolon-separated list that can be defined, for example, as `-PUPDAT
 
 If you are **backporting** a mod from 1.17 or later to 1.16 or earlier, add `-PREVERSED=true`. This will convert the classnames from Mojang back to MCP.
 
-### 6. Update your mappings version
-You should now update your mappings `version` to match the Minecraft version you are updating to.
+### 6. Update Forge and mappings
+You should now update your Forge version and mappings to match the Minecraft version you are updating to.
 For example, if you are now developing for 1.17.1, your `mappings` line should look like this:
 ```groovy
     mappings channel: 'official', version: '1.17.1'
 ```
-You should now also update your Forge and ForgeGradle versions, if not already.
+You can find the latest Forge version for a given Minecraft release [here](https://files.minecraftforge.net/net/minecraftforge/forge/).
 
 ### 7. Done!
 Afterwards, your mod should now have new classnames!
